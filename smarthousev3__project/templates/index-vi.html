@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quản lí kho</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="top">
+        <!-- Avatar + tên user -->
+        <div id="userProfileBtn" style="cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 15px;">
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+               alt="Avatar"
+               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+          <div style="color: white;">
+            <div style="font-size: 14px;">Chào,</div>
+            <div style="font-weight: bold;">{{ name }}</div>
+          </div>
+        </div>
+  
+        <!-- Menu -->
+        <a href="#" id="homeMenu" class="active">Trang chủ</a>
+        <a href="#" id="roomsMenu">Phòng</a>
+        <a href="#" id="Security">An ninh</a>
+        <a href="#" id="settingsMenu">Cài đặt</a>
+      </div>
+  
+      <!-- Logout -->
+      <a href="#" class="logout" onclick="logout()">⎋ Đăng xuất</a>
+    </div>
+  
+    <div class="main" id="mainContent">
+      <div id="homeSection" class="page-section active">
+        <h2>📊 Tổng quan hệ thống</h2>
+        <div id="overviewCards" class="overview-cards">
+          <div class="overview-card">
+            <div class="label">Số phòng</div>
+            <div class="value" id="roomCount">0</div>
+          </div>
+          <div class="overview-card">
+            <div class="label">Thiết bị đang hoạt động</div>
+            <div class="value green" id="activeDevices">0</div>
+          </div>
+          <div class="overview-card">
+            <div class="label">Cảnh báo an ninh</div>
+            <div class="value red" id="securityWarnings">0</div>
+          </div>
+        </div>
+      </div>
+  
+      <div id="roomsSection" class="page-section" style="display: none;"></div>
+  
+      <div id="securitySection" class="page-section" style="display: none;">
+        <h2 style="margin-bottom: 20px;">Giám sát an ninh</h2>
+      
+        <div class="camera-container">
+          <div class="camera-feed">
+            <img id="cameraFeed"  alt="Camera feed sẽ hiển thị tại đây" />
+          </div>
+          <div class="camera-controls">
+            <button id="startCameraBtn">🔴 Bật Camera</button>
+            <button id="stopCameraBtn">⏹️ Tắt Camera</button>
+            <label class="motion-detect-toggle">
+              <input type="checkbox" id="motionToggle" checked />
+              Phát hiện người lạ (Gửi Email)
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Modal chụp ảnh -->
+<div id="cameraModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center;">
+  <div style="background:white; padding:20px; border-radius:10px; text-align:center;">
+    <video id="video" autoplay playsinline style="width:100%; max-width:400px;"></video>
+    <br>
+    <button id="snapBtn" style="margin-top:10px;">📸 Chụp</button>
+    <button onclick="closeCamera()" style="margin-left:10px;">❌ Đóng</button>
+    <canvas id="canvas" style="display:none;"></canvas>
+  </div>
+</div>
+<!-- Log điều khiển giọng nói -->
+<div id="voiceLogPanel" class="voice-log">
+  <div class="log-title">🗒️ Lịch sử điều khiển giọng nói</div>
+  <div id="voiceLogContent"></div>
+</div>
+
+<!-- Nút mở/ẩn log -->
+<button id="toggleLogBtn" onclick="toggleVoiceLog()">📝 Log</button>
+
+
+<script>
+  const main = document.getElementById("mainContent");
+
+  document.getElementById("userProfileBtn").addEventListener("click", () => {
+    fetch('/api/users/profile')
+      .then(res => res.json())
+      .then(data => {
+        main.innerHTML = `
+          <div style="max-width: 500px; margin: 0 auto;">
+            <h2 style="text-align:center;">Thông tin người dùng</h2>
+            <form id="userInfoForm" style="display: flex; flex-direction: column; gap: 10px;">
+              <label>Họ tên:</label>
+              <input type="text" name="name" value="${data.name}" disabled required>
+
+              <label>Email:</label>
+              <input type="email" name="email" value="${data.email}" disabled required>
+
+              <label>Mật khẩu:</label>
+              <input type="password" name="pass" value="${data.pass}" disabled required>
+
+              <label>Số điện thoại:</label>
+              <input type="text" name="phone" value="${data.phone}" disabled>
+
+              <label>Địa chỉ:</label>
+              <input type="text" name="address" value="${data.address}" disabled>
+
+              <button type="button" id="addImageBtn" style="background:#007bff; color:white; padding:10px; width:100%; border:none;">
+                Thêm hình ảnh người dùng
+              </button>
+
+              <div style="display: flex; justify-content: space-between;">
+                <button type="button" id="editBtn" style="width:48%; background:#28a745; color:white; border:none; padding:10px;">Chỉnh sửa</button>
+                <button type="button" onclick="location.reload()" style="width:48%; background:#ccc; border:none; padding:10px;">Hủy</button>
+              </div>
+            </form>
+          </div>
+        `;
+
+        // === GẮN SỰ KIỆN CHỤP ẢNH SAU KHI FORM HIỂN THỊ ===
+        document.getElementById("addImageBtn").addEventListener("click", () => {
+          const modal = document.getElementById("cameraModal");
+          const video = document.getElementById("video");
+          modal.style.display = "flex";
+
+          navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+              video.srcObject = stream;
+              video.play();
+            });
+
+          document.getElementById("snapBtn").onclick = function () {
+            const canvas = document.getElementById("canvas");
+            const context = canvas.getContext("2d");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const imageData = canvas.toDataURL("image/png");
+            const email = document.querySelector("input[name='email']").value;
+
+            fetch("/api/users/upload-face", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ email, image: imageData })
+            })
+            .then(res => res.json())
+            .then(data => {
+              alert(data.message);
+              closeCamera();
+            });
+          };
+        });
+
+        // === CHỈNH SỬA THÔNG TIN NGƯỜI DÙNG ===
+        document.getElementById("editBtn").addEventListener("click", function () {
+          const form = document.getElementById("userInfoForm");
+          const inputs = form.querySelectorAll("input");
+          const btn = this;
+
+          if (btn.innerText === "Chỉnh sửa") {
+            inputs.forEach(input => input.disabled = false);
+            btn.innerText = "Cập nhật";
+          } else {
+            const formData = new FormData(form);
+            fetch('/api/users/update', {
+              method: 'POST',
+              body: new URLSearchParams(formData)
+            })
+            .then(res => res.json())
+            .then(data => {
+              alert(data.message);
+              if (data.success) location.reload();
+            });
+          }
+        });
+      });
+  });
+
+  function closeCamera() {
+    const modal = document.getElementById("cameraModal");
+    const video = document.getElementById("video");
+    const stream = video.srcObject;
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+    modal.style.display = "none";
+  }
+</script>
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>
+

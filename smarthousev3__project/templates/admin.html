@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    
+    <div class="mainBlock">
+        <div class="sideMenu">
+            <h2 style="text-align: center;">ADMIN</h2>
+            <ul class="sideList">
+                <li id="home">Trang chủ</li>
+                <li id="statistics" >Quản lí người dùng</li>
+                <li id="feedback">FeedBack</li>
+            </ul>
+        </div>
+        <div class="container" id="container">
+            <div id="CONTENT">
+                <div id="homeContent" >
+                    <h2>Chào mừng, <span id="adminName">Admin</span>!</h2>
+                    <p id="adminDescription"></p>  <!-- Thêm dòng này -->
+                </div>
+                <!-- Quản lý người dùng -->
+                <!-- Trong file HTML chính -->
+<div id="user-management" style="display: none;">
+    <h2>Quản lí người dùng</h2>
+    <button onclick="addUser()">Thêm người dùng</button>
+    <table id="user-table">
+      <thead>
+        <tr>
+          <th>STT</th>   
+          <th>Tên</th>
+          <th>Địa chỉ</th>
+          <th>Email</th>
+          <th>Mật khẩu</th>
+          <th>SĐT</th>
+          <th>CCCD</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="user-table-body" >
+        <!-- Nội dung sẽ được đổ từ JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  
+                <div id="feedBackContent">
+                </div>
+                </div>
+        </div>
+        <script>
+            const adminData = {
+                name: "{{ session.get('name', 'Admin') }}",
+                role: "{{ session.get('role', '') }}"
+            };
+            document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("adminName").textContent = adminData.name;
+            });
+        </script>        
+    <script src="https://kit.fontawesome.com/fee9c8bda7.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='admin.js') }}"></script>
+</body>
+</html>

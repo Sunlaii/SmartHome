@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,100..900;1,100..900&display=swap');
+body{
+    background-image: linear-gradient(to right top, #fbc2eb 50%, #a6c1ee 50%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 80vh;
+}
+.centerBlock{
+    border: solid 1px #333;
+    width: 30%;
+    margin-left: 35%;
+    margin-top: 10%;
+    display: flex;
+    flex-wrap: nowrap;
+    box-shadow: #63dbeb 3px 10px 20px 10px;
+    border-radius: 20px;
+}
+.formBlock{
+    width: 100%;
+    background-image: linear-gradient(to bottom left, #30cfd0 0%, #9241f6 100%);
+    color: white;
+    padding: 30px;
+    font-family: "Sour Gummy", sans-serif;
+    justify-items: center;
+    border-radius: 20px;
+}
+.formBlock label{
+    font-size: small;
+}
+h3{
+    font-size: x-large;
+}
+.formBlock input[type="text"],
+.formBlock input[type="password"]{
+    border: solid 1px black;
+    border-radius: 3px;
+    padding: 10px 20px ;
+    background-color: #ffffffb6;
+}
+.formBlock input[type="submit"]{
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: #86ff9a;
+    border: unset;
+    border-radius: 200px;
+    padding: 10px 20px ;
+    margin-top: 20px;
+    font-family: "Sour Gummy";
+}
+.formBlock input[type="submit"]:hover {
+    background-color: #2bff2b;
+    cursor: pointer;
+}
+@media (max-width: 768px) {
+    .centerBlock {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    margin-top: 10%;
+    max-width: 100%; 
+    }
+}
+@media (max-width: 480px) {
+    .centerBlock {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    margin-top: 10%;
+    max-width: 100%; 
+    }
+}
+#fogotpasswordForm{
+    display: flex;
+    flex-wrap: nowrap;
+}
+#fogotpasswordForm button{
+    border-radius: 3px;
+    background-color: #86ff9a;
+}
+#fogotEmail{
+    width: 100%;
+    border-radius: 3px;
+    background-color: aliceblue;
+    color: black;
+    padding: 10px;
+}
+#forgotPasswordForm {
+    display: none;
+}
+#faceLoginContainer {
+    background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    margin: auto;
+    margin-top: 30px;
+    text-align: center;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#faceLoginContainer h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.face-btn {
+    background-color: #00e676;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.face-btn:hover {
+    background-color: #00c853;
+}
+.cancel-btn {
+    margin-top: 10px;
+    background-color: #ff5252;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+.cancel-btn:hover {
+    background-color: #e53935;
+}
+#voiceAssistantWidget button:hover {
+    opacity: 0.9;
+  }
+
+  

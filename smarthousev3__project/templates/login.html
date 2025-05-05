@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF+8">
+        <link rel="stylesheet" href="#">
+        <title>Đăng nhập</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='loginstyle.css') }}">
+    </head>
+    <body>
+        <div class="centerBlock" >
+            <div class="formBlock" id="formBlock" method="POST">
+                <h3>Chào mừng bạn đã quay lại</h3>
+                <form action="#" name="modelUI" onsubmit="return checkLogin(event)">
+                    <label for="username">Your email address</label><br>
+                    <input type="text" name="useremail" id="email" placeholder="Email" required><br>
+                    <label for="password"> Your password</label><br>
+                    <input type="password" name="password" id="pass" placeholder="Password" required> <br>
+                    <input type="submit"  name="btnsubmit" id="" value="Đăng nhập"> <br>
+                    <a href="#" onclick="showForgotForm()">Quên mật khẩu?</a>
+                    <a href="#" onclick="startFaceLogin()">Face Id</a>
+                </form>
+            </div>
+            <div id="faceLoginContainer" class="formBlock" style="display: none;">
+                <h3>Đăng nhập bằng Face ID</h3>
+                <video id="video" width="320" height="240" autoplay style="border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"></video><br><br>
+                <button class="face-btn" onclick="captureAndLogin()">📷 Chụp & Đăng nhập</button>
+                <button class="cancel-btn" onclick="cancelFaceLogin()">❌ Hủy</button>
+                <canvas id="canvas" width="320" height="240" style="display: none;"></canvas>
+            </div>
+            
+                   
+            <div id="forgotPasswordForm" class="formBlock">
+                <h3>Quên mật khẩu</h3>
+                <input type="text" id="forgotPhone" placeholder="Số điện thoại" required>
+                <input type="text" id="forgotCCCD" placeholder="CCCD" required>
+                <button onclick="sendEmailToAdmin()">Gửi yêu cầu</button>
+                <button onclick="closeForm()">Hủy</button>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='login.js') }}"></script>
+    </body>
+
+</html>
