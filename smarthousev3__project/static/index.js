@@ -34,7 +34,7 @@ function removeVietnameseTones(str) {
 }
 
 const rooms = {
-  "Phòng ngủ 1": ["Đèn", "Quạt", "Máy lạnh"],
+  "Phòng ngủ 1": ["Đèn", "Quạt", "Rèm"],
   "Phòng ngủ 2": ["Đèn", "Quạt", "Máy lạnh"],
   "Phòng khách": ["Đèn", "Quạt", "TV"],
   "Phòng bếp": ["Đèn", "Máy hút mùi", "Lò vi sóng"]
@@ -129,13 +129,7 @@ function showDevices(room) {
 
 
 
-function toggleDevice(device, btn) {
-  deviceStates[device] = !deviceStates[device];
-  const isOn = deviceStates[device];
 
-  btn.textContent = isOn ? "Bật" : "Tắt";
-  btn.className = `toggle-btn ${isOn ? 'on' : 'off'}`;
-}
 
 
 // Cập nhật trạng thái thiết bị
@@ -330,12 +324,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  
-  
-  
-  
 
-  
-  
 
-  
+
+
+
+
+
+

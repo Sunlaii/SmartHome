@@ -8,11 +8,18 @@ from facenet_pytorch import MTCNN
 from sklearn.metrics.pairwise import cosine_similarity
 import json
 from database import connect_db
+import os
 
 face_auth_bp = Blueprint("face_auth", __name__)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-face_model = torch.load("models/face_model_feature_v3.pth", map_location=device)
+
+# Update the path to the model file dynamically
+model_path = os.path.join(os.path.dirname(__file__), 'models', 'face_model_feature_v3.pth')
+if not os.path.exists(model_path):
+    raise FileNotFoundError(f"Model file not found at {model_path}")
+
+face_model = torch.load(model_path, map_location=device)
 face_model.eval()
 
 mtcnn = MTCNN(keep_all=False, device=device)
