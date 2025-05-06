@@ -5,7 +5,7 @@ import time
 from flask import Flask, request, jsonify
 
 
-board = Arduino('COM15')  # Thay COM11 bằng cổng Arduino của bạn
+board = Arduino('COM3')  # Thay COM11 bằng cổng Arduino của bạn
 servo_pin = 9  # Chân 9 ở chế độ servo
 
 def move_servo(angle):

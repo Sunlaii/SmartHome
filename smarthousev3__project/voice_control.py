@@ -1,8 +1,6 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 import speech_recognition as sr
 from servo_control import move_servo , controdevie
-import sys
-sys.stdout.reconfigure(encoding='utf-8')
 voice_bp = Blueprint('voice', __name__)
 
 recognizer = sr.Recognizer()
@@ -35,6 +33,4 @@ def voice_recognition():
         except sr.UnknownValueError:
             print("Không nhận diện được giọng nói.")
             return jsonify({"text": None, "lang": None})
-
-
-
+        

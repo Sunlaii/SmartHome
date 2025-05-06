@@ -12,8 +12,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
 from botmes import send_telegram_message
-import os
-
 security_bp = Blueprint("security", __name__)
 
 # === Cấu hình ===
@@ -25,13 +23,7 @@ security_alert_count = 0
 
 # === Thiết bị và mô hình ===
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-# Update the path to the model file dynamically
-model_path = os.path.join(os.path.dirname(__file__), 'models', 'face_model_feature_v3.pth')
-if not os.path.exists(model_path):
-    raise FileNotFoundError(f"Model file not found at {model_path}")
-
-face_model = torch.load(model_path, map_location=device)
+face_model = torch.load("models/face_model_feature_v3.pth", map_location=device)
 face_model.eval()
 mtcnn = MTCNN(keep_all=False, device=device)
 
